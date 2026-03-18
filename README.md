@@ -1,5 +1,10 @@
-# Домашняя работа OTUS_Angie_03_Миграция_с_Nginx_на_Angie
+# Домашняя работа OTUS-Angie-2025-10-04 OTUS_Angie_04_Миграция_с_Nginx_на_Angie
 
+#### Замечание.
+Поскольку в исходной конфигурации локации "\\" использовался upstream, ссылающийся на порты 9000-9003, которые в конфигурации не были представлены, я создал для них отдельный сервер (см. [/http.d/upstream.conf](https://github.com/SergeyBoonin/OTUS-Angie-2025-10-04/blob/main/http.d/upstream.conf)), чтоб было удобнее видеть ответы, а не ошибку 500.
+
+#### Работающий сервер Nginx
+```
 root@ubuntu01:/home/user# curl -v --compressed http://192.168.31.122/
 
 *   Trying 192.168.31.122:80...
@@ -83,21 +88,15 @@ Hello 127.0.0.1:57270!
 This is 127.0.0.1:9003 speaking.
 
 * Connection #0 to host 192.168.31.122 left intact
-
 ```
 
-
-
+#### Переключение на Angie
 ```
-
 root@ubuntu01:/home/user# systemctl stop nginx && systemctl start angie
-
 ```
 
-
-
+#### Работающий сервер Angie
 ```
-
 root@ubuntu01:/home/user# curl -v --compressed http://192.168.31.122/
 
 *   Trying 192.168.31.122:80...
@@ -181,11 +180,10 @@ Hello 127.0.0.1:57200!
 This is 127.0.0.1:9001 speaking.
 
 * Connection #0 to host 192.168.31.122 left intact
-
-
-
 ```
 
+#### Удаление Nginx
+```
 root@ubuntu01:/home/user# apt-get remove --purge nginx
 
 Reading package lists... Done
@@ -255,13 +253,10 @@ angie: the configuration file /etc/angie/angie.conf syntax is ok
 angie: configuration file /etc/angie/angie.conf test is successful
 
 root@ubuntu01:/home/user# service angie restart
-
 ```
 
-
-
+#### Работающий сервер Angie
 ```
-
 root@ubuntu01:/home/user# curl -v --compressed http://192.168.31.122/
 
 *   Trying 192.168.31.122:80...
@@ -303,23 +298,10 @@ Hello 127.0.0.1:47886!
 This is 127.0.0.1:9002 speaking.
 
 * Connection #0 to host 192.168.31.122 left intact
-
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-
+#### Итоговая колфигурация Angie
 ```
-
 root@ubuntu01:/etc/angie# angie -T
 
 angie: the configuration file /etc/angie/angie.conf syntax is ok
@@ -1073,5 +1055,4 @@ server {
     }
 
 }
-
 ```
